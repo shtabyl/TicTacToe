@@ -60,6 +60,7 @@ function GameController(
     ];
 
     let activePlayer = players[0];
+    let roundsPlayed = 0;
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -73,42 +74,39 @@ function GameController(
     };
 
     const checkForWinner = (row, column) => {
-        let resultRow = 0;
-        let resultColumn = 0;
-        let resultCrossDown = 0;
-        let resultCrossUp = 0;
+        const result = { row: 0, column: 0, crossUp: 0, crossDown: 0 };
         for (let i = 0; i < 3; i++) {
             if (board.getBoard()[1][1].getValue()) {
-                resultCrossDown += board.getBoard()[i][i].getValue();
-                resultCrossUp += board.getBoard()[2 - i][i].getValue();
+                result.crossDown += board.getBoard()[i][i].getValue();
+                result.crossUp += board.getBoard()[2 - i][i].getValue();
             }
-            resultRow += board.getBoard()[row][i].getValue();
-            resultColumn += board.getBoard()[i][column].getValue();
+            result.row += board.getBoard()[row][i].getValue();
+            result.column += board.getBoard()[i][column].getValue();
         }
-        if (
-            Math.abs(resultRow) === 3 
-            || Math.abs(resultColumn) === 3 
-            || Math.abs(resultCrossDown) === 3 
-            || Math.abs(resultCrossUp) === 3
-        ) {
+        console.log(result);
+        if (Object.values(result).includes(3)) {
             return getActivePlayer().name;
         }
     };
 
-    
-
-    const playRound = (row, column) => {
+        const playRound = (row, column) => {
         console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
         board.markCell(row, column, getActivePlayer().mark);
+        roundsPlayed++;
 
         const winner = checkForWinner(row, column);
         if (winner) {
             console.log(winner + ' WINS!')
+            roundsPlayed = 0;
             return;
         } else {
             switchPlayerTurn();
             printNewRound();
+            console.log(roundsPlayed);
         }
+        // console.log(winner);
+        // switchPlayerTurn();
+        // printNewRound();
     }
 
     printNewRound();

@@ -16,7 +16,7 @@ function GameBoard() {
     const getBoard = () => board;
 
     const markCell = (row, column, playerMark) => {
-        if (board[row][column].getValue() !== null) {
+        if (board[row][column].getValue() !== 0) {
             return
         }
         board[row][column].addMark(playerMark);
@@ -31,7 +31,7 @@ function GameBoard() {
 }
 
 function Cell() {
-    let value = null;
+    let value = 0;
 
     const addMark = (playerMark) => {
         value = playerMark; // value = player.mark;
@@ -51,11 +51,11 @@ function GameController(
     const players = [
         {
             name: playerOneName,
-            mark: 0
+            mark: 1
         },
         {
             name: playerTwoName,
-            mark: 1
+            mark: -1
         }
     ];
 
@@ -72,12 +72,45 @@ function GameController(
         console.log(`${getActivePlayer().name}'s turn.`);
     };
 
+    const checkForWinner = () => {
+        let resultRow = 0;
+        let resultColumn = 0;
+        let resultCrossDown = 0;
+        let resultCrossUp = 0;
+        for (let i = 0; i < 3; i++) {
+            if (board.getBoard()[1][1].getValue()) {
+                resultCrossDown += board.getBoard()[i][i].getValue();
+                resultCrossUp += board.getBoard()[2 - i][i].getValue();
+            }
+            for (let j = 0; j < 3; j++) {
+                resultRow += board.getBoard()[i][j].getValue();
+                resultColumn += board.getBoard()[j][i].getValue();
+            }
+        }
+        if (
+            Math.abs(resultRow) === 3 
+            || Math.abs(resultColumn) === 3 
+            || Math.abs(resultCrossDown) === 3 
+            || Math.abs(resultCrossUp) === 3
+        ) {
+            return getActivePlayer().name;
+        }
+    };
+
+    
+
     const playRound = (row, column) => {
         console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
-        board.markCell(row, column, getActivePlayer().mark)
-        
-        switchPlayerTurn();
-        printNewRound();
+        board.markCell(row, column, getActivePlayer().mark);
+
+        const winner = checkForWinner();
+        if (winner) {
+            console.log(winner + ' WINS!')
+            return;
+        } else {
+            switchPlayerTurn();
+            printNewRound();
+        }
     }
 
     printNewRound();

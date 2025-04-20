@@ -72,7 +72,7 @@ function GameController(
         console.log(`${getActivePlayer().name}'s turn.`);
     };
 
-    const checkForWinner = () => {
+    const checkForWinner = (row, column) => {
         let resultRow = 0;
         let resultColumn = 0;
         let resultCrossDown = 0;
@@ -82,10 +82,8 @@ function GameController(
                 resultCrossDown += board.getBoard()[i][i].getValue();
                 resultCrossUp += board.getBoard()[2 - i][i].getValue();
             }
-            for (let j = 0; j < 3; j++) {
-                resultRow += board.getBoard()[i][j].getValue();
-                resultColumn += board.getBoard()[j][i].getValue();
-            }
+            resultRow += board.getBoard()[row][i].getValue();
+            resultColumn += board.getBoard()[i][column].getValue();
         }
         if (
             Math.abs(resultRow) === 3 
@@ -103,7 +101,7 @@ function GameController(
         console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
         board.markCell(row, column, getActivePlayer().mark);
 
-        const winner = checkForWinner();
+        const winner = checkForWinner(row, column);
         if (winner) {
             console.log(winner + ' WINS!')
             return;

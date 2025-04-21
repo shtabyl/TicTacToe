@@ -61,6 +61,8 @@ function GameController(
 
     let activePlayer = players[0];
 
+    let roundsPlayed = 0;
+
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
@@ -85,28 +87,45 @@ function GameController(
         console.log(result);
         if (
             Object.values(result).includes(3) 
-            || Object.values(result).includes(-3)) {
+            || Object.values(result).includes(-3)
+            ) {
                 return getActivePlayer().name;
         }
     };
 
-        const playRound = (row, column) => {
+    
+    const playRound = (row, column) => {
+        // make playRound execute only if the roundsPlayed is less than 9
+        if (roundsPlayed === 0 || roundsPlayed >= 9) {
+            return;
+        }
         console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
         board.markCell(row, column, getActivePlayer().mark);
 
         const winner = checkForWinner(row, column);
+
         if (winner) {
-            console.log(winner + ' WINS!')
+            stopGame(winner);
             return;
         } else {
             switchPlayerTurn();
             printNewRound();
+            roundsPlayed++;
         }
     }
 
-    printNewRound();
+    const startGame = () => {
+        printNewRound();
+        roundsPlayed++;
+    }
+    
+    const stopGame = (winner) => {
+        console.log(winner + ' WINS!');
+        board.getBoard().map((row) => row.map((cell) => cell.addMark(0)));
+        roundsPlayed = 0;
+    }
 
-    return { playRound, getActivePlayer };
+    return { startGame, playRound, getActivePlayer };
 }
 
 

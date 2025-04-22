@@ -95,32 +95,39 @@ function GameController(
 
     
     const playRound = (row, column) => {
-        // make playRound execute only if the roundsPlayed is less than 9
-        if (roundsPlayed === 0 || roundsPlayed >= 9) {
+        if (roundsPlayed === 0) {
             return;
-        }
+        } 
+
+        roundsPlayed++;
         console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
         board.markCell(row, column, getActivePlayer().mark);
-
+        console.log(`Round ${roundsPlayed}`); // log round number
         const winner = checkForWinner(row, column);
 
         if (winner) {
             stopGame(winner);
             return;
+        } else if (roundsPlayed === 9) {
+            stopGame(0);
         } else {
             switchPlayerTurn();
             printNewRound();
-            roundsPlayed++;
         }
     }
 
     const startGame = () => {
         printNewRound();
         roundsPlayed++;
+        console.log(`Round ${roundsPlayed}`); // log round number
     }
     
     const stopGame = (winner) => {
-        console.log(winner + ' WINS!');
+        if (winner) {
+            console.log(winner + ' WINS!');
+        } else {
+            console.log('Tie!');
+        }
         board.getBoard().map((row) => row.map((cell) => cell.addMark(0)));
         roundsPlayed = 0;
     }

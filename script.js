@@ -16,9 +16,9 @@ function GameBoard() {
     const getBoard = () => board;
 
     const markCell = (row, column, playerMark) => {
-        if (board[row][column].getValue() !== 0) {
-            return
-        }
+        // if (board[row][column].getValue() !== 0) {
+        //     return;
+        // }
         board[row][column].addMark(playerMark);
     };
     
@@ -27,14 +27,14 @@ function GameBoard() {
         console.log(boardWithCellValues);
     }
 
-    return {getBoard, markCell, printBoard};
+    return { getBoard, markCell, printBoard };
 }
 
 function Cell() {
     let value = 0;
 
     const addMark = (playerMark) => {
-        value = playerMark; // value = player.mark;
+        value = playerMark;
     };
 
     const getValue = () => value;
@@ -93,16 +93,22 @@ function GameController(
         }
     };
 
-    
     const playRound = (row, column) => {
         if (roundsPlayed === 0) {
             return;
         } 
 
+        if (board.getBoard()[row][column].getValue() !== 0) {
+            console.log('Invalid move');
+            return;
+        }
+
         roundsPlayed++;
-        console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
-        board.markCell(row, column, getActivePlayer().mark);
         console.log(`Round ${roundsPlayed}`); // log round number
+        console.log(`Put ${getActivePlayer().name}'s mark into row ${row}, column ${column}`);
+        
+        board.markCell(row, column, getActivePlayer().mark);
+        
         const winner = checkForWinner(row, column);
 
         if (winner) {
@@ -132,7 +138,7 @@ function GameController(
         roundsPlayed = 0;
     }
 
-    return { startGame, playRound, getActivePlayer };
+    return { startGame, startGame, playRound, getActivePlayer };
 }
 
 

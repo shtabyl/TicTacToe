@@ -1,3 +1,5 @@
+
+
 function createUser (name, mark) {
     return {name, mark}
 }
@@ -14,6 +16,8 @@ function GameBoard() {
     };
     
     const getBoard = () => board;
+    const getRows = () => rows;
+    const getColumns = () => columns;
 
     const markCell = (row, column, playerMark) => {
         // if (board[row][column].getValue() !== 0) {
@@ -27,7 +31,7 @@ function GameBoard() {
         console.log(boardWithCellValues);
     }
 
-    return { getBoard, markCell, printBoard };
+    return { getBoard, markCell, printBoard, getRows, getColumns };
 }
 
 function Cell() {
@@ -68,6 +72,8 @@ function GameController(
     };
 
     const getActivePlayer = () => activePlayer;
+
+    const getRoundsPlayed = () => roundsPlayed;
 
     const printNewRound = () => {
         board.printBoard();
@@ -113,9 +119,10 @@ function GameController(
 
         if (winner) {
             stopGame(winner);
-            return;
-        } else if (roundsPlayed === 9) {
+            return winner;
+        } else if (roundsPlayed > 9) {
             stopGame(0);
+            return 'Tie!';
         } else {
             switchPlayerTurn();
             printNewRound();
@@ -129,17 +136,22 @@ function GameController(
     }
     
     const stopGame = (winner) => {
+        // board.getBoard().forEach(row => row.forEach(cell => cell.addMark(0)));
+        // board.getBoard().map(row => row.map(cell => cell.addMark(0)));
+        roundsPlayed = 0;
         if (winner) {
             console.log(winner + ' WINS!');
+            return `${winner} WINS!`;
         } else {
             console.log('Tie!');
+            return 'Tie!';
         }
-        board.getBoard().map((row) => row.map((cell) => cell.addMark(0)));
-        roundsPlayed = 0;
     }
 
-    return { startGame, startGame, playRound, getActivePlayer };
+    return { startGame, stopGame, playRound, getActivePlayer, switchPlayerTurn, getRoundsPlayed, checkForWinner, board };
 }
 
 
 const game = GameController();
+
+module.exports = { GameBoard, GameController };

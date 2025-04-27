@@ -1,0 +1,13 @@
+*,
+*:before,
+*:after {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.board {
+    width: 100px;
+    height: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}

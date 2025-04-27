@@ -20,9 +20,6 @@ function GameBoard() {
     const getColumns = () => columns;
 
     const markCell = (row, column, playerMark) => {
-        // if (board[row][column].getValue() !== 0) {
-        //     return;
-        // }
         board[row][column].addMark(playerMark);
     };
     
@@ -51,6 +48,7 @@ function GameController(
     playerTwoName = "Player Two"
 ) {
     const board = GameBoard();
+    const cellsAmount = board.getRows() * board.getColumns();
 
     const players = [
         {
@@ -122,7 +120,7 @@ function GameController(
         if (winner) {
             stopGame(winner);
             return winner;
-        } else if (roundsPlayed > 9) {
+        } else if (roundsPlayed > cellsAmount) {
             stopGame(0);
             return 'Tie!';
         } else {
@@ -139,7 +137,6 @@ function GameController(
     }
     
     const stopGame = (winner) => {
-        // board.getBoard().map(row => row.map(cell => cell.addMark(0)));
         roundsPlayed = 0;
         if (winner) {
             console.log(winner + ' WINS!');
@@ -169,7 +166,7 @@ function ScreenController() {
         const activePlayer = game.getActivePlayer();
         const board = game.board.getBoard();
 
-        // display player's turn, round, result
+        // display player's turn, round
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
         roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
 
@@ -204,6 +201,7 @@ function ScreenController() {
         updateScreen();
     }
 
+    // Add event listener for cell
     boardDiv.addEventListener('click', clickHandleBoard);
     
     function clickStartGame() {
@@ -212,8 +210,11 @@ function ScreenController() {
         resultDiv.textContent = '';
         updateScreen();
     }
+
+    // Add event listener for start game
     startGameBtn.addEventListener('click', clickStartGame);
 
+    // Initial render
     updateScreen();
 }
 

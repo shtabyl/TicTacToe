@@ -1,9 +1,4 @@
 
-
-function createUser (name, mark) {
-    return {name, mark}
-}
-
 function GameBoard() {
     const rows = 3;
     const columns = 3;
@@ -60,6 +55,12 @@ function GameController(
             mark: -1
         }
     ];
+
+    const setPlayerName = (inputValues) => {
+        for (let i = 0; i < players.length; i++) {
+            players[i].name = inputValues[i].value;
+        }
+    };
 
     let activePlayer = players[0];
 
@@ -147,17 +148,20 @@ function GameController(
         }
     }
 
-    return { startGame, stopGame, playRound, getActivePlayer, switchPlayerTurn, getRoundsPlayed, checkForWinner, board };
+    return { startGame, stopGame, playRound, getActivePlayer, switchPlayerTurn, getRoundsPlayed, checkForWinner, setPlayerName, board };
 }
 
 function ScreenController() {
-    const game = GameController();
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
     const startGameBtn = document.querySelector('.start-game');
     const resultDiv = document.querySelector('.result');
     const roundDiv = document.querySelector('.round');
-
+    const playerNames = document.querySelectorAll('.player-name');
+    
+    // const game = GameController(playerNames[0].value, playerNames[1].value);
+    const game = GameController();
+    
     const updateScreen = () => {
         // clear the board
         boardDiv.textContent = '';
@@ -166,9 +170,11 @@ function ScreenController() {
         const activePlayer = game.getActivePlayer();
         const board = game.board.getBoard();
 
-        // display player's turn, round
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
-        roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
+        // display player's turn, round when startBtn clicked
+        if (game.getRoundsPlayed() > 0) {
+            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+            roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
+        }
 
         // render board squares
         board.forEach((row, rowIndex) => {
@@ -183,7 +189,6 @@ function ScreenController() {
         });
     }
 
-    // Add event listener for the board
     function clickHandleBoard(e) {
         const selectedRow = e.target.dataset.row;
         const selectedColumn = e.target.dataset.column;
@@ -206,7 +211,7 @@ function ScreenController() {
     
     function clickStartGame() {
         game.startGame();
-        roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
+        game.setPlayerName(playerNames);
         resultDiv.textContent = '';
         updateScreen();
     }

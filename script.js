@@ -219,6 +219,12 @@ function ScreenController() {
     boardDiv.addEventListener('click', clickHandleBoard);
     
     function clickStartGame() {
+        if (game.getRoundsPlayed() > 0) {
+            let response = confirm('Are you sure you want to start a new game?');
+            if (!response) {
+                return;
+            }
+        }
         game.startGame();
         game.setPlayerName(playerNames);
         statusDiv.textContent = '';

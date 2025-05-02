@@ -163,6 +163,16 @@ function ScreenController() {
     
     // const game = GameController(playerNames[0].value, playerNames[1].value);
     const game = GameController();
+
+    const changeNumbersToMarks = (cellValue) => {
+        if (cellValue === 0) {
+            return '';
+        } else if (cellValue === 1) {
+            return 'X';
+        } else if (cellValue === -1) {
+            return 'O';
+        }
+    }
     
     const updateScreen = () => {
         // clear the board
@@ -185,7 +195,7 @@ function ScreenController() {
                 cellButton.classList.add('cell');
                 cellButton.dataset.row = rowIndex;
                 cellButton.dataset.column = columnIndex;
-                cellButton.textContent = cell.getValue();
+                cellButton.textContent = changeNumbersToMarks(cell.getValue());
                 boardDiv.appendChild(cellButton);
             });
         });

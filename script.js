@@ -132,6 +132,8 @@ function GameController(
 
     const startGame = () => {
         board.getBoard().forEach(row => row.forEach(cell => cell.addMark(0)));
+        activePlayer = players[0];
+        roundsPlayed = 0;
         roundsPlayed++;
         console.log(`Round ${roundsPlayed}`); // log round number
         printNewRound();
@@ -210,9 +212,6 @@ function ScreenController() {
     boardDiv.addEventListener('click', clickHandleBoard);
     
     function clickStartGame() {
-        if (game.getRoundsPlayed() > 0) {
-            return;
-        }
         game.startGame();
         game.setPlayerName(playerNames);
         resultDiv.textContent = '';

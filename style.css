@@ -21,3 +21,15 @@
     align-items: center;
     cursor: pointer;
 }
+
+.copyright {
+    color: var(--clr-primary-middle);
+    font-size: 14px;
+    & a {
+        text-decoration: none;
+        color: var(--clr-primary-middle);
+        &:hover {
+            color: var(--clr-primary-beige);
+        }
+    }
+}

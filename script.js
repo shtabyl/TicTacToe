@@ -154,14 +154,11 @@ function GameController(
 }
 
 function ScreenController() {
-    const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
     const startGameBtn = document.querySelector('.start-game');
-    const resultDiv = document.querySelector('.result');
-    const roundDiv = document.querySelector('.round');
+    const statusDiv = document.querySelector('.status');
     const playerNames = document.querySelectorAll('.player-name');
     
-    // const game = GameController(playerNames[0].value, playerNames[1].value);
     const game = GameController();
 
     const changeNumbersToMarks = (cellValue) => {
@@ -184,8 +181,8 @@ function ScreenController() {
 
         // display player's turn, round when startBtn clicked
         if (game.getRoundsPlayed() > 0) {
-            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
-            roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
+            statusDiv.textContent = `${activePlayer.name}'s turn...`;
+            // roundDiv.textContent = `Round ${game.getRoundsPlayed()}`;
         }
 
         // render board squares
@@ -211,9 +208,9 @@ function ScreenController() {
 
         const result = game.playRound(selectedRow, selectedColumn);
         if (result && result !== 'Tie!') {
-            resultDiv.textContent = `${result} wins!`;
+            statusDiv.textContent = `${result} wins!`;
         } else if (result === 'Tie!') {
-            resultDiv.textContent = 'Tie!';
+            statusDiv.textContent = 'Tie!';
         }
         updateScreen();
     }
@@ -224,7 +221,7 @@ function ScreenController() {
     function clickStartGame() {
         game.startGame();
         game.setPlayerName(playerNames);
-        resultDiv.textContent = '';
+        statusDiv.textContent = '';
         updateScreen();
     }
 
